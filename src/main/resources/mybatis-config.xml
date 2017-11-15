@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<!--注意configuration中节点的位置是有先后顺序的-->
+<configuration>
+    <typeAliases>
+        <!-- 类型别名就是可以给类的全路径起一个简称 -->
+        <typeAlias type="com.news.gfs.pojo.GfsNewsCategory" alias="GfsNewsCategory"/>
+        <typeAlias type="com.news.gfs.pojo.GfsNewsInfo" alias="GfsNewsInfo"/>
+        <typeAlias type="com.news.gfs.pojo.GfsNewsUser" alias="GfsNewsUser"/>
+    </typeAliases>
+    <plugins>
+        <!-- PageHelper4.1.1 分页插件 -->
+        <plugin interceptor="com.github.pagehelper.PageHelper">
+            <property name="dialect" value="mysql"/><!--数据库方言-->
+            <!-- 3.3.0版本可用 - 分页参数合理化，默认false禁用 -->
+            <!-- 启用合理化时，如果pageNum<1会查询第一页，如果pageNum>pages会查询最后一页 -->
+            <!-- 禁用合理化时，如果pageNum<1或pageNum>pages会返回空数据 -->
+            <property name="reasonable" value="false"/>
+        </plugin>
+    </plugins>
+
+</configuration>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.news.gfs.dao.GfsNewsCategoryDao">
+
+    <insert id="addType" parameterType="GfsNewsCategory" keyProperty="id" useGeneratedKeys="true">
+        insert into GFS_category (TYPE)
+        values(#{typeName})
+    </insert>
+
+    <resultMap id="TypeMap" type="GfsNewsCategory">
+        <id    column="ID" property="id"/>
+        <result property="typeName" column="TYPE"/>
+    </resultMap>
+    <select id="getTypeById" parameterType="int" resultMap="TypeMap">
+        select ID,TYPE from GFS_category
+        where ID=#{id}
+    </select>
+
+    <resultMap id="TypeMapAll" type="GfsNewsCategory">
+        <id    column="ID" property="id"/>
+        <result property="typeName" column="TYPE"/>
+    </resultMap>
+    <select id="getTypeAll"  resultMap="TypeMapAll">
+        select ID,TYPE from GFS_category
+    </select>
+
+    <resultMap id="TypeMapAllHAHA" type="GfsNewsCategory">
+        <id    column="ID" property="id"/>
+        <result property="typeName" column="TYPE"/>
+    </resultMap>
+    <select id="getAllType"  resultMap="TypeMapAllHAHA">
+        select ID,TYPE from GFS_category
+    </select>
+
+    <resultMap id="TypeMapName" type="GfsNewsCategory">
+        <id property="id" column="ID"/>
+        <result property="typeName" column="TYPE"/>
+    </resultMap>
+    <select id="getTypeByName" parameterType="string" resultMap="TypeMapName" >
+        select ID,TYPE from GFS_category
+        where TYPE =#{typeName}
+    </select>
+
+    <update id="updateTypeInfo" parameterType="GfsNewsCategory">
+        update GFS_category
+        set TYPE=#{typeName}
+        where ID=#{id}
+    </update>
+
+    <delete id="deleteTypeById" parameterType="int">
+        delete FROM GFS_category
+        WHERE ID=#{id}
+    </delete>
+</mapper>

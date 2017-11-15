@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.news.gfs.dao.GfsNewsInfoDao">
+
+    <insert id="addNewsInfo" parameterType="GfsNewsInfo" keyProperty="id" useGeneratedKeys="true">
+        insert into GFS_news(USER_ID,TYPE_ID,WRITERS,TITLE,CONTENTS,CREATE_DATE)
+        values(#{userId},#{typeId},#{writers},#{title},#{contents},now())
+    </insert>
+
+    <resultMap id="infoMap" type="GfsNewsInfo">
+        <id    column="ID" property="id"/>
+        <result property="userId" column="USER_ID"/>
+        <result property="typeId" column="TYPE_ID"/>
+        <result property="writers" column="WRITERS"/>
+        <result property="title" column="TITLE"/>
+        <result property="contents" column="CONTENTS"/>
+        <result property="createDate" column="CREATE_DATE"/>
+    </resultMap>
+
+    <select id="selectById" parameterType="int" resultMap="infoMap">
+        select ID,USER_ID,TYPE_ID,WRITERS,TITLE,CONTENTS,CREATE_DATE from GFS_news
+        where STATUS = 1 and ID=#{id}
+    </select>
+
+    <resultMap id="infoMapAll" type="GfsNewsInfo">
+        <id    column="ID" property="id"/>
+        <result property="userId" column="USER_ID"/>
+        <result property="typeId" column="TYPE_ID"/>
+        <result property="writers" column="WRITERS"/>
+        <result property="title" column="TITLE"/>
+        <result property="contents" column="CONTENTS"/>
+        <result property="createDate" column="CREATE_DATE"/>
+        <result property="gfsNewsCategory.id" column="TID"/>
+        <result property="gfsNewsCategory.typeName" column="TTYPE"/>
+    </resultMap>
+
+    <select id="getInfoList" parameterType="GfsNewsInfo" resultMap="infoMapAll">
+        select I.ID,I.USER_ID,I.TYPE_ID,I.WRITERS,I.TITLE,I.CONTENTS,I.CREATE_DATE,T.ID TID,T.TYPE TTYPE from GFS_news I
+        inner join GFS_category T ON I.TYPE_ID=T.ID
+        <where>
+            STATUS = 1
+            <if test="typeId!=null">and I.TYPE_ID=#{typeId}</if>
+            <if test="writers!=null and writers!=''">and I.WRITERS=#{writers}</if>
+            <if test="minDate !=null">and I.CREATE_DATE &gt;=#{minDate}</if>
+            <if test="maxDate !=null">and I.CREATE_DATE &lt;=#{maxDate}</if>
+            <if test="title!=null and title !=''">and I.TITLE like CONCAT('%', #{title},'%')</if>
+        </where>
+    </select>
+
+    <resultMap id="infoPage" type="GfsNewsInfo">
+        <id    column="ID" property="id"/>
+        <result property="writers" column="WRITERS"/>
+        <result property="title" column="TITLE"/>
+        <result property="contents" column="CONTENTS"/>
+        <result property="createDate" column="CREATE_DATE"/>
+    </resultMap>
+    <select id="getInfoById" parameterType="int" resultMap="infoPage">
+        select ID,WRITERS,TITLE,CONTENTS,CREATE_DATE from GFS_news
+        where STATUS = 1 and ID=#{id}
+    </select>
+
+    <update id="deleteInfo" parameterType="int">
+        update GFS_news
+        set STATUS= 0
+        where TYPE_ID=#{id}
+    </update>
+
+</mapper>
